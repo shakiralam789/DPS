@@ -108,6 +108,7 @@ export default function useForm(defaultValues = {}) {
     post,
     put,
     get,
-    request
+    request,
+    defaultValues
   };
 }

@@ -1,29 +1,29 @@
-import React, { useState } from "react";
 import { signal } from "@preact/signals-react";
+
+export const step = signal([
+  {
+    step: "01",
+    title: "Applicant's Personal Details",
+  },
+  {
+    step: "02",
+    title: "Nominee's Information",
+  },
+  {
+    step: "03",
+    title: "Field officer information",
+  },
+]);
 
 export const currentStep = signal(1);
 
 export default function DepositStep() {
-  const [step, setStep] = useState([
-    {
-      step: "01",
-      title: "Applicant's Personal Details",
-    },
-    {
-      step: "02",
-      title: "Nominee's Information",
-    },
-    {
-      step: "03",
-      title: "For Official use",
-    },
-  ]);
-
   return (
     <div className="grid grid-cols-3 relative">
-        <span className="z-10 absolute top-5 2xl:top-7 -translate-y-1/2 left-[16%] right-[16%] h-px bg-gray-300"></span>
-      {step.map((item, index) => {
-        let currentClass = "bg-body-color border-primary-purple  text-primary-purple";
+      <span className="z-10 absolute top-5 2xl:top-7 -translate-y-1/2 left-[16%] right-[16%] h-px bg-gray-300"></span>
+      {step.value.map((item, index) => {
+        let currentClass =
+          "bg-body-color border-primary-purple  text-primary-purple";
         let filledClass = "border-primary-purple bg-primary-purple text-white";
         let unfilledClass = "bg-body-color border-gray-300 text-gray-icon";
 
@@ -43,7 +43,15 @@ export default function DepositStep() {
             >
               {item.step}
             </div>
-            <div className={`font-16 ${currentStep == item.step || currentStep > item.step ? "text-primary-purple" : "text-gray-icon"}`}>{item.title}</div>
+            <div
+              className={`font-16 ${
+                currentStep == item.step || currentStep > item.step
+                  ? "text-primary-purple"
+                  : "text-gray-icon"
+              }`}
+            >
+              {item.title}
+            </div>
           </div>
         );
       })}

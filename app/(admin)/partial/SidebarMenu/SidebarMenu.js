@@ -18,6 +18,7 @@ import {
 import HomeIcon from "@/components/icons/HomeIcon";
 import UsersIcon from "@/components/icons/UsersIcon";
 import DPSIcon from "@/components/icons/DPSIcon";
+import Image from "next/image";
 
 // Map of icon names to their components
 const IconMap = {
@@ -571,19 +572,24 @@ const SidebarMenu = ({ menuItems, isCollapsed, toggleCollapse }) => {
                   }`}
       >
         {/* Logo */}
-        <div className="header-height relative p-4 border-b border-gray-200">
+        <div className="header-height relative px-4 py-2 flex items-center justify-center border-b border-gray-200">
           <Link
             href={"/dashboard"}
             className="flex items-center justify-center"
           >
-            <div className="shrink-0 h-8 w-8 rounded-full bg-primary-purple flex items-center justify-center">
-              {/* Logo can go here */}
+            <div className="shrink-0 w-10 rounded-full bg-primary-purple flex items-center">
+              <Image
+                src={"/images/auth-logo.png"}
+                height={50}
+                width={50}
+                alt="logo"
+              />
             </div>
-            {(!isCollapsed || (isBrowser && windowWidth < 768)) && (
+            {/* {(!isCollapsed || (isBrowser && windowWidth < 768)) && (
               <span className="ml-3 font-semibold font-24 text-gray-text truncate">
                 AppName
               </span>
-            )}
+            )} */}
           </Link>
 
           {/* Toggle Collapse Button - Only visible on desktop */}
