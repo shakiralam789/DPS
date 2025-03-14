@@ -6,74 +6,76 @@ import TableDropdown, {
 } from "@/components/table/TableDropdown";
 import Pagination from "@/components/Pagination";
 import PopUp from "@/components/PopUp";
+import { useRouter } from "nextjs-toploader/app";
+
+const dpsList = [
+  {
+    id: 1,
+    sl: 1,
+    user_name: "MD Aminul Islam",
+    deposit_type: "DS",
+    validity: "3 years",
+    starting_date: "04/02/2025",
+    ending_date: "04/02/2025",
+    amount: "৳ 27,375",
+    account_number: "218376874346",
+    status: "active",
+  },
+  {
+    id: 2,
+    sl: 2,
+    user_name: "MD Aminul Islam",
+    deposit_type: "DS",
+    validity: "3 years",
+    starting_date: "04/02/2025",
+    ending_date: "04/02/2025",
+    amount: "৳ 27,375",
+    account_number: "218376874346",
+    status: "inactive",
+  },
+  {
+    id: 3,
+    sl: 3,
+    user_name: "MD Aminul Islam",
+    deposit_type: "DS",
+    validity: "3 years",
+    starting_date: "04/02/2025",
+    ending_date: "04/02/2025",
+    amount: "৳ 27,375",
+    account_number: "218376874346",
+    status: "active",
+  },
+  {
+    id: 4,
+    sl: 4,
+    user_name: "MD Aminul Islam",
+    deposit_type: "DS",
+    validity: "3 years",
+    starting_date: "04/02/2025",
+    ending_date: "04/02/2025",
+    amount: "৳ 27,375",
+    account_number: "218376874346",
+    status: "active",
+  },
+];
 
 const DPSTableDesign = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [info, setInfo] = useState({});
-
-  const dpsList = [
-    {
-      id: 1,
-      sl: 1,
-      user_name: "MD Aminul Islam",
-      deposit_type: "DS",
-      validity: "3 years",
-      starting_date: "04/02/2025",
-      ending_date: "04/02/2025",
-      amount: "৳ 27,375",
-      account_number: "218376874346",
-      status: "active",
-    },
-    {
-      id: 2,
-      sl: 2,
-      user_name: "MD Aminul Islam",
-      deposit_type: "DS",
-      validity: "3 years",
-      starting_date: "04/02/2025",
-      ending_date: "04/02/2025",
-      amount: "৳ 27,375",
-      account_number: "218376874346",
-      status: "inactive",
-    },
-    {
-      id: 3,
-      sl: 3,
-      user_name: "MD Aminul Islam",
-      deposit_type: "DS",
-      validity: "3 years",
-      starting_date: "04/02/2025",
-      ending_date: "04/02/2025",
-      amount: "৳ 27,375",
-      account_number: "218376874346",
-      status: "active",
-    },
-    {
-      id: 4,
-      sl: 4,
-      user_name: "MD Aminul Islam",
-      deposit_type: "DS",
-      validity: "3 years",
-      starting_date: "04/02/2025",
-      ending_date: "04/02/2025",
-      amount: "৳ 27,375",
-      account_number: "218376874346",
-      status: "active",
-    },
-  ];
+  const router = useRouter();
 
   const renderStatusBadge = (status) => {
     if (status === "active") {
       return (
-          <div className="text-green-500 bg-green-light px-2 py-0.5 rounded-full">
-            Active
-          </div>
+        <div className="text-green-500 bg-green-light px-2 py-0.5 rounded-full">
+          Active
+        </div>
       );
     } else {
       return (
-          <div className="text-gray-gray-400 bg-gray-light px-2 py-0.5 rounded-full">
-            Inactive
-          </div>
+        <div className="text-gray-gray-400 bg-gray-light px-2 py-0.5 rounded-full">
+          Inactive
+        </div>
       );
     }
   };
@@ -104,7 +106,11 @@ const DPSTableDesign = () => {
           {dpsList &&
             dpsList.length > 0 &&
             dpsList.map((dps, index) => (
-              <Trow key={dps.id}>
+              <Trow
+                key={dps.id}
+                // className="cursor-pointer"
+                // onClick={() => router.push(`/dps/show/${dps.id}`)}
+              >
                 <TCell>{dps.sl}</TCell>
                 <TCell>{dps.user_name}</TCell>
                 <TCell>{dps.deposit_type}</TCell>
@@ -114,12 +120,15 @@ const DPSTableDesign = () => {
                 <TCell>{dps.amount}</TCell>
                 <TCell>{dps.account_number}</TCell>
                 <TCell>{renderStatusBadge(dps.status)}</TCell>
-                <TCell className="text-center">
+                <TCell
+                  className="text-center cursor-default"
+                  // onClick={(e) => e.stopPropagation()}
+                >
                   <TableDropdown>
-                    <TableDropdownItem>View</TableDropdownItem>
-                    <TableDropdownItem href={`/users/edit/${dps.id}`}>
+                    <TableDropdownItem href={`/dps/show/${dps.id}`}>Show</TableDropdownItem>
+                    {/* <TableDropdownItem href={`/dps/edit/${dps.id}`}>
                       Edit
-                    </TableDropdownItem>
+                    </TableDropdownItem> */}
                     <TableDropdownItem
                       onClick={() =>
                         openPopUp({

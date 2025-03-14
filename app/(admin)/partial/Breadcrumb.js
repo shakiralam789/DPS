@@ -16,7 +16,7 @@ const ROUTE_MAPPINGS = {
 };
 
 // Dynamic segment indicators - these are segments that should keep their ID
-const DYNAMIC_SEGMENTS = ["edit", "show", "details"];
+const DYNAMIC_SEGMENTS = ["edit", "show","profile", "details"];
 
 /**
  * Smart Breadcrumb Component

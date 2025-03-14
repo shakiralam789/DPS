@@ -1,5 +1,5 @@
 import { generateMetadata } from '@/utilities/metaData';
-export const metadata = () => generateMetadata({ title: "Update DPS" });
+export const metadata = () => generateMetadata({ title: "Deposit View" });
 export default function layout({children}) {
   return (
     <>

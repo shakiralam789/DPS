@@ -50,7 +50,7 @@ export function Trow({ children, className = "", role = "row", ...props }) {
   );
 }
 
-export function TCell({ children, className = "", role = "cell" }) {
+export function TCell({ children, className = "", role = "cell", ...props }) {
   const baseClass = "px-4 2xl:px-6 h-8 2xl:h-10 py-1";
   if (role === "header") {
     return (
@@ -60,6 +60,7 @@ export function TCell({ children, className = "", role = "cell" }) {
           `${baseClass} text-left font-medium text-gray-700 capitalize tracking-wider whitespace-nowrap`,
           className
         )}
+        {...props}
       >
         {children}
       </th>
@@ -67,14 +68,14 @@ export function TCell({ children, className = "", role = "cell" }) {
   }
 
   return (
-    <td className={cn(`${baseClass} text-gray-500`, className)}>{children}</td>
+    <td className={cn(`${baseClass} text-gray-500`, className)} {...props}>{children}</td>
   );
 }
 
 export function Nodata() {
   return (
     <Trow>
-      <TCell colSpan={100} className="text-center">
+      <TCell  colSpan={100} className="text-center">
         No data found
       </TCell>
     </Trow>

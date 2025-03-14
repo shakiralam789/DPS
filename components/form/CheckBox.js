@@ -10,7 +10,7 @@ export default function CheckBox({
     <label className="flex items-center group/check">
       <span
         className={cn(
-          "shrink-0 all-check cursor-pointer group-has-[input:checked]/check:bg-primary-purple group-has-[input:checked]/check:border-primary-purple flex justify-center items-center size-4 2xl:size-5 border-2 border-primary-purple rounded",
+          "shrink-0 all-check cursor-pointer group-has-[input:checked]/check:bg-primary-purple group-has-[input:checked]/check:border-primary-purple flex justify-center items-center size-4 2xl:size-5 border-2 border-gray-300 rounded",
           className
         )}
       >

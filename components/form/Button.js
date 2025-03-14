@@ -171,7 +171,6 @@ export const Button = ({
           className={buttonClasses}
           target={target}
           rel={finalRel}
-          onClick={onClick}
           {...props}
         >
           {content}
@@ -185,7 +184,6 @@ export const Button = ({
       className={cn(buttonClasses,className)}
         target={target}
         rel={finalRel}
-        onClick={onClick}
         {...props}
       >
         {content}
@@ -268,7 +266,6 @@ export const IconButton = ({
           className={buttonClasses}
           target={target}
           rel={finalRel}
-          onClick={onClick}
           {...props}
         >
           {icon}
@@ -283,7 +280,6 @@ export const IconButton = ({
         className={buttonClasses}
         target={target}
         rel={finalRel}
-        onClick={onClick}
         {...props}
       >
         {icon}
