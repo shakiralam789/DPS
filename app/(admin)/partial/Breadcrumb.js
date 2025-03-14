@@ -213,7 +213,7 @@ export default function Breadcrumb({ items, className = "", Icon, backBtn=true,c
             className="px-2 pl-1 py-1"
           >
             <ChevronLeftIcon
-              className="flex-shrink-0 size-3.5 2xl:size-4 mr-2"
+              className="flex-shrink-0 size-3.5 2xl:size-4"
               aria-hidden="true"
               strokeWidth={2}
             />

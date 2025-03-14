@@ -2,13 +2,19 @@
 
 import React, { useState } from "react";
 
-export default function FileUpload({ accept, multiple, ...props }) {
+export default function FileUpload({
+  accept,
+  onChange = () => {},
+  multiple,
+  ...props
+}) {
   const [files, setFiles] = useState([]);
 
   const handleFileChange = (e) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       setFiles((prev) => (multiple ? [...prev, ...newFiles] : newFiles));
+      if (onChange) onChange(e);
     }
   };
 

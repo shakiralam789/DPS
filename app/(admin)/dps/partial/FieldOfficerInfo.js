@@ -1,5 +1,9 @@
 import Button from "@/components/form/Button";
-import { SelectSet, TextFieldSet } from "@/components/form/FieldSet";
+import {
+  DatePickerSet,
+  SelectSet,
+  TextFieldSet,
+} from "@/components/form/FieldSet";
 import useForm from "@/hook/_customUseForm";
 import { currentStep } from "./DepositStep";
 import SectionTitle from "../../partial/SectionTitle";
@@ -11,15 +15,9 @@ export default function FieldOfficerInfo({
   totalData,
 }) {
   const router = useRouter();
-  const {
-    reset,
-    control,
-    register,
-    post,
-    put,
-    errors,
-    handleSubmit,
-  } = useForm(formData || {});
+  const { reset, control, register, post, put, errors, handleSubmit } = useForm(
+    formData || {}
+  );
 
   function onSubmit(data) {
     currentStep.value = 4;
@@ -33,13 +31,31 @@ export default function FieldOfficerInfo({
 
     setTotalData(newData);
 
+    let formData = new FormData();
+
+    let photoFile = newData.applicant_personal_details.photo[0];
+    let photoFile2 = newData.nominee_details.photo[0];
+
+    let submitData = JSON.parse(JSON.stringify(newData));
+
+    if (photoFile) {
+      submitData.applicant_personal_details.photo = "";
+      formData.append("applicant_personal_details.photo", photoFile);
+    }
+
+    if (photoFile2) {
+      submitData.nominee_details.photo = "";
+      formData.append("nominee_details.photo", photoFile2);
+    }
+
+    formData.append("data", JSON.stringify(submitData));
+
+    console.log(formData);
+    
     router.push("/dps");
 
-    if (!formData) {
-      console.log("create user");
-    } else {
-      console.log("update user");
-    }
+
+   
   }
 
   return (
@@ -89,10 +105,10 @@ export default function FieldOfficerInfo({
             />
           </div>
           <div className="col-span-4">
-            <TextFieldSet
+            <DatePickerSet
               fieldName={"starting_date"}
               errors={errors}
-              register={register}
+              control={control}
             />
           </div>
         </div>

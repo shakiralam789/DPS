@@ -8,6 +8,7 @@ import TextArea from "@/components/form/TextArea";
 import TextField from "@/components/form/TextField";
 import useForm from "@/hook/_customUseForm";
 import { currentStep } from "./DepositStep";
+import { FileUploadSet } from "@/components/form/FieldSet";
 
 const options = [
   { label: "DS", value: "ds" },
@@ -234,8 +235,10 @@ export default function PersonalDetailsForm({
           </div>
           <div className="col-span-4">
             <Label>Upload a Photo of the Applicant</Label>
-            <FileUpload {...register("photo")} />
-            <ErrorMsg message={errors?.deposit_amount_in_word?.message} />
+            <FileUpload
+              {...register("photo", { required: "Photo is required" })}
+            />
+            <ErrorMsg message={errors?.photo?.message} />
           </div>
         </div>
         <div className="flex items-center gap-2 mt-4 2xl:mt-6">

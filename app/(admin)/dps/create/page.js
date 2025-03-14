@@ -23,7 +23,7 @@ export default function CreateUser() {
       <div className="w-10/12 mx-auto mb-6 2xl:mb-8">
         <DepositStep />
       </div>
-      <div className="box-section">
+      <div className="box-section relative z-30">
         <SectionTitle>{step.value[crrStep - 1]?.title || ""}</SectionTitle>
         <Form data={data} setTotalData={setTotalData} totalData={totalData} />
       </div>

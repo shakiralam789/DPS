@@ -1,21 +1,21 @@
 import ErrorMsg from "@/components/ErrorMsg";
 import Button from "@/components/form/Button";
 import CheckBox from "@/components/form/CheckBox";
-import { TextAreaSet, TextFieldSet } from "@/components/form/FieldSet";
+import {
+  DatePickerSet,
+  TextAreaSet,
+  TextFieldSet,
+} from "@/components/form/FieldSet";
 import FileUpload from "@/components/form/FileUpload";
 import Label from "@/components/form/Label";
 import useForm from "@/hook/_customUseForm";
 import { currentStep } from "./DepositStep";
+import ModDataPicker from "@/components/form/DatePicker";
 
 export default function NomineeInfo({ formData, setTotalData, totalData }) {
-  const {
-    reset,
-    register,
-    post,
-    put,
-    errors,
-    handleSubmit,
-  } = useForm(formData || {});
+  const { control, reset, register, post, put, errors, handleSubmit } = useForm(
+    formData || {}
+  );
 
   function onSubmit(data) {
     currentStep.value = 3;
@@ -76,10 +76,10 @@ export default function NomineeInfo({ formData, setTotalData, totalData }) {
             />
           </div>
           <div className="col-span-3">
-            <TextFieldSet
+            <DatePickerSet
               fieldName={"date_of_birth"}
               errors={errors}
-              register={register}
+              control={control}
             />
           </div>
           <div className="col-span-3">
@@ -108,7 +108,9 @@ export default function NomineeInfo({ formData, setTotalData, totalData }) {
           </div>
           <div className="col-span-4">
             <Label>Upload a Photo of the Applicant</Label>
-            <FileUpload {...register("photo")} />
+            <FileUpload
+              {...register("photo", { required: "Photo is required" })}
+            />
             <ErrorMsg message={errors?.deposit_amount_in_word?.message} />
           </div>
         </div>
