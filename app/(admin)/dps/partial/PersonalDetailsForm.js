@@ -11,6 +11,7 @@ import { currentStep } from "./DepositStep";
 import { FileUploadSet } from "@/components/form/FieldSet";
 import { signal } from "@preact/signals-core";
 import { useSignal } from "@/hook/useSignal";
+import { useEffect } from "react";
 
 const options = [
   { label: "DS", value: "ds" },
@@ -30,10 +31,13 @@ export default function PersonalDetailsForm({
   const {
     Controller,
     reset,
+    setData,
+    data,
     control,
     register,
     post,
     put,
+    watch,
     errors,
     handleSubmit,
   } = useForm(aliveData || formData || {});
@@ -58,6 +62,16 @@ export default function PersonalDetailsForm({
       console.log("update user");
     }
   }
+  const permanentAddressSame = watch("permanent_address_same");
+  const presentAddressSame = watch("present_address");
+
+  useEffect(() => {
+    if (permanentAddressSame) {
+      setData("permanent_address", presentAddressSame);
+    } else {
+      setData("permanent_address", "");
+    }
+  }, [permanentAddressSame]);
 
   return (
     <>
@@ -187,19 +201,25 @@ export default function PersonalDetailsForm({
             />
             <ErrorMsg message={errors?.present_address?.message} />
           </div>
-          <div className="col-span-8">
-            <Label>permanent address</Label>
-            <TextArea
-              {...register("permanent_address", {
-                required: "permanent address is required",
-              })}
-              placeholder={"Enter your permanent address"}
-            />
-            <ErrorMsg message={errors?.permanent_address?.message} />
-          </div>
           <div className="col-span-12">
-            <CheckBox label="same as present address" />
+            <CheckBox
+              {...register("permanent_address_same")}
+              label="Use this as permanent address"
+            />
           </div>
+          {permanentAddressSame ? null : (
+            <div className="col-span-8">
+              <Label>permanent address</Label>
+              <TextArea
+                {...register("permanent_address", {
+                  required: "permanent address is required",
+                })}
+                placeholder={"Enter your permanent address"}
+              />
+              <ErrorMsg message={errors?.permanent_address?.message} />
+            </div>
+          )}
+
           <div className="col-span-3">
             <Label>Admission fee and various</Label>
             <TextField
