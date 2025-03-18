@@ -10,16 +10,27 @@ import FileUpload from "@/components/form/FileUpload";
 import Label from "@/components/form/Label";
 import useForm from "@/hook/_customUseForm";
 import { currentStep } from "./DepositStep";
-import ModDataPicker from "@/components/form/DatePicker";
+import { signal } from "@preact/signals-core";
+import { useSignal } from "@/hook/useSignal";
+import { useRouter } from "next/navigation";
+import { personalDetailsFormData } from "./PersonalDetailsForm";
+
+const nomineeFormData = signal(null);
 
 export default function NomineeInfo({ formData, setTotalData, totalData }) {
-  const { control, reset, register, post, put, errors, handleSubmit } = useForm(
-    formData || {}
-  );
-
+  const preservedDate = useSignal(nomineeFormData);
+  const {
+    control,
+    reset,
+    register,
+    post,
+    put,
+    errors,
+    handleSubmit,
+    processing,
+  } = useForm(preservedDate || formData || {});
+  const router = useRouter();
   function onSubmit(data) {
-    currentStep.value = 3;
-
     let copyData = { ...totalData };
 
     let newData = {
@@ -27,12 +38,45 @@ export default function NomineeInfo({ formData, setTotalData, totalData }) {
       nominee_details: data,
     };
 
+    nomineeFormData.value = data;
+
     setTotalData(newData);
 
-    if (!formData) {
-      console.log("create user");
-    } else {
-      console.log("update user");
+    let formData = new FormData();
+
+    let photoFile = newData.applicant_personal_details.photo[0];
+    let photoFile2 = newData.nominee_details.photo[0];
+
+    let submitData = JSON.parse(JSON.stringify(newData));
+
+    if (photoFile) {
+      submitData.applicant_personal_details.photo = "";
+      formData.append("applicant_personal_details.photo", photoFile);
+    }
+
+    if (photoFile2) {
+      submitData.nominee_details.photo = "";
+      formData.append("nominee_details.photo", photoFile2);
+    }
+
+    formData.append("data", JSON.stringify(submitData));
+    console.log(formData);
+
+    post(
+      "/api/v1/apply-dps",
+      { body: formData },
+      {
+        onSuccess: (msg) => {
+          console.log(msg);
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      }
+    );
+
+    if (!processing) {
+      router.push("/dps");
     }
   }
 
@@ -108,13 +152,18 @@ export default function NomineeInfo({ formData, setTotalData, totalData }) {
           </div>
           <div className="col-span-4">
             <Label>Upload a Photo of the Applicant</Label>
-            <FileUpload
-              {...register("photo", { required: "Photo is required" })}
-            />
+            <FileUpload {...register("photo")} />
             <ErrorMsg message={errors?.deposit_amount_in_word?.message} />
           </div>
         </div>
         <div className="flex items-center gap-2 mt-4 2xl:mt-6">
+          <Button
+            variant="stroke"
+            type="button"
+            onClick={() => (currentStep.value = 1)}
+          >
+            Back
+          </Button>
           <Button type="button" onClick={reset} variant="danger">
             Reset
           </Button>

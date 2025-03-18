@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google";
 import StoreProvider from "@/src/store/Provider";
 import {NextIntlClientProvider} from 'next-intl';
 import {getLocale, getMessages} from 'next-intl/server';
+import { AuthProvider } from "@/components/AuthProvider";
 
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
@@ -33,18 +34,20 @@ export default async function RootLayout({ children }) {
   return (
     <html lang={locale}>
       <body className={roboto.className + " bg-body-color"}>
-        <StoreProvider>
-          <NextIntlClientProvider messages={messages}>
-            <NextTopLoader
-              color="#5E35CC"
-              height={3}
-              speed={500}
-              showSpinner={false}
-            />
-            <ToastContainer style={{ marginTop: "100px" }} autoClose={3000} />
-          </NextIntlClientProvider>
-        </StoreProvider>
-        {children}
+        <AuthProvider>
+          <StoreProvider>
+            <NextIntlClientProvider messages={messages}>
+              <NextTopLoader
+                color="#5E35CC"
+                height={3}
+                speed={500}
+                showSpinner={false}
+              />
+              <ToastContainer style={{ marginTop: "100px" }} autoClose={3000} />
+            </NextIntlClientProvider>
+          </StoreProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

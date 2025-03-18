@@ -54,8 +54,6 @@ export default function FieldOfficerInfo({
     
     router.push("/dps");
 
-
-   
   }
 
   return (

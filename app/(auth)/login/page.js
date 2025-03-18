@@ -8,6 +8,7 @@ import Link from "next/link";
 import PasswordField from "@/components/form/PasswordField";
 import TextField from "@/components/form/TextField";
 import ErrorMsg from "@/components/ErrorMsg";
+import { signIn } from "next-auth/react";
 import {
   combineRules,
   emailRule,
@@ -16,26 +17,46 @@ import {
 } from "@/utilities/validationUtils";
 import useForm from "@/hook/_customUseForm";
 import { useRouter } from "nextjs-toploader/app";
-
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
-  const { errors, data, post, register, handleSubmit } = useForm({
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const [isLoading, setIsLoading] = useState(false);
+  const [backendError, setError] = useState("");
+  const { errors, register, handleSubmit } = useForm({
     email: "",
     password: "",
   });
 
   const router = useRouter();
 
-  const submitForm = (data) => {
-    router.push("/dashboard");
-    // post("/api/auth/login", {
-    //   body: data,
-    // });
+  const submitForm = async (data) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        ...data,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+        setIsLoading(false);
+        return;
+      }
+
+      router.push(callbackUrl);
+    } catch (error) {
+      setError("An unexpected error occurred. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   return (
     <form
-      onSubmit={handleSubmit(submitForm)}
+      // onSubmit={handleSubmit(submitForm)}
       className="space-y-4 2xl:space-y-6"
     >
       <div>
@@ -65,7 +86,7 @@ const LoginForm = () => {
         <ErrorMsg message={errors?.password?.message} />
       </div>
 
-      <Button type="submit" className="mb-4">
+      <Button href={"/dashboard"} className="mb-4">
         Login
       </Button>
 

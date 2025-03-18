@@ -15,7 +15,6 @@ export default function CreateUser() {
   const data = {
     applicant_personal_details: {},
     nominee_details: {},
-    field_officer_details: {},
   };
 
   return (

@@ -9,6 +9,8 @@ import TextField from "@/components/form/TextField";
 import useForm from "@/hook/_customUseForm";
 import { currentStep } from "./DepositStep";
 import { FileUploadSet } from "@/components/form/FieldSet";
+import { signal } from "@preact/signals-core";
+import { useSignal } from "@/hook/useSignal";
 
 const options = [
   { label: "DS", value: "ds" },
@@ -17,11 +19,14 @@ const options = [
   { label: "YS", value: "ys" },
 ];
 
+export const personalDetailsFormData = signal(null);
+
 export default function PersonalDetailsForm({
   formData,
   setTotalData,
   totalData,
 }) {
+  const aliveData = useSignal(personalDetailsFormData);
   const {
     Controller,
     reset,
@@ -31,7 +36,7 @@ export default function PersonalDetailsForm({
     put,
     errors,
     handleSubmit,
-  } = useForm(formData || {});
+  } = useForm(aliveData || formData || {});
 
   function onSubmit(data) {
     let copyData = { ...totalData };
@@ -40,6 +45,8 @@ export default function PersonalDetailsForm({
       ...copyData,
       applicant_personal_details: data,
     };
+
+    personalDetailsFormData.value = data;
 
     setTotalData(newData);
 
@@ -235,9 +242,7 @@ export default function PersonalDetailsForm({
           </div>
           <div className="col-span-4">
             <Label>Upload a Photo of the Applicant</Label>
-            <FileUpload
-              {...register("photo", { required: "Photo is required" })}
-            />
+            <FileUpload {...register("photo")} />
             <ErrorMsg message={errors?.photo?.message} />
           </div>
         </div>

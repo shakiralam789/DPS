@@ -9,18 +9,14 @@ export const step = signal([
     step: "02",
     title: "Nominee's Information",
   },
-  {
-    step: "03",
-    title: "Field officer information",
-  },
 ]);
 
 export const currentStep = signal(1);
 
 export default function DepositStep() {
   return (
-    <div className="grid grid-cols-3 relative">
-      <span className="z-10 absolute top-5 2xl:top-7 -translate-y-1/2 left-[16%] right-[16%] h-px bg-gray-300"></span>
+    <div className="grid grid-cols-2 relative">
+      <span className="z-10 absolute top-5 2xl:top-7 -translate-y-1/2 left-[25%] right-[25%] h-px bg-gray-300"></span>
       {step.value.map((item, index) => {
         let currentClass =
           "bg-body-color border-primary-purple  text-primary-purple";

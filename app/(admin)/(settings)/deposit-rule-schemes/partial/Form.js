@@ -21,6 +21,7 @@ export default function Form({ userData = null }) {
     data,
     Controller,
     control,
+    post,
     register,
     handleSubmit,
     errors,
@@ -54,12 +55,18 @@ export default function Form({ userData = null }) {
   }
 
   function onSubmit(data) {
-    console.log("Form Data:", data);
-    if (!userData) {
-      console.log("Create user");
-    } else {
-      console.log("Update user");
-    }
+    post(
+      "/api/v1/deposit-rule-schemes",
+      { body: data },
+      {
+        onSuccess: (res) => {
+          console.log(res);
+        },
+        onError: (err) => {
+          console.log("from form", err);
+        },
+      }
+    );
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 2xl:space-y-6">
@@ -72,11 +79,11 @@ export default function Form({ userData = null }) {
             rules={{ required: "Deposit type is required" }}
             render={({ field }) => (
               <>
-              <CustomSelect
-                {...field}
-                options={options}
-                placeholder="Select Deposit type"
-              />
+                <CustomSelect
+                  {...field}
+                  options={options}
+                  placeholder="Select Deposit type"
+                />
               </>
             )}
           />

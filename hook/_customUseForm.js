@@ -43,9 +43,10 @@ export default function useForm(defaultValues = {}) {
     setValue(key, value);
   };
 
-  const request = async (method, url, options = {}) => {
+  const request = async (method, url, options = {}, onAction = {}) => {
+    const { onSuccess = () => {}, onError = () => {} } = onAction;
     setProcessing(true);
-    setApiErrors({}); // Clear previous errors
+    setApiErrors({});
     try {
       const isFormData = options.body instanceof FormData;
       const fetchOptions = {
@@ -71,22 +72,35 @@ export default function useForm(defaultValues = {}) {
       if (!response.ok) {
         const errorData = await response.json();
         if (errorData.errors) {
-          setApiErrors(errorData.errors); // Store validation errors
+          setApiErrors(errorData.errors);
+          if (onError) {
+            onError(errorData.errors);
+          }
         }
         throw new Error(errorData.message || `Error: ${response.status}`);
       }
 
+      if (onSuccess) {
+        onSuccess(response);
+      }
+
       return await response.json();
     } catch (error) {
+      if (onError) {
+        onError(error);
+      }
       console.error("Request Error:", error.message);
     } finally {
       setProcessing(false);
     }
   };
 
-  const post = (url, options) => request("POST", url, options);
-  const put = (url, options) => request("PUT", url, options);
-  const get = (url, options) => request("GET", url, options);
+  const post = (url, options, onAction) =>
+    request("POST", url, options, onAction);
+  const put = (url, options, onAction) =>
+    request("PUT", url, options, onAction);
+  const get = (url, options, onAction) =>
+    request("GET", url, options, onAction);
 
   return {
     useFieldArray,
@@ -109,6 +123,6 @@ export default function useForm(defaultValues = {}) {
     put,
     get,
     request,
-    defaultValues
+    defaultValues,
   };
 }
