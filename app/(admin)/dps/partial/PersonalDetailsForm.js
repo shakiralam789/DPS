@@ -11,7 +11,7 @@ import { currentStep } from "./DepositStep";
 import { FileUploadSet } from "@/components/form/FieldSet";
 import { signal } from "@preact/signals-core";
 import { useSignal } from "@/hook/useSignal";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const options = [
   { label: "DS", value: "ds" },
@@ -28,15 +28,13 @@ export default function PersonalDetailsForm({
   totalData,
 }) {
   const aliveData = useSignal(personalDetailsFormData);
+  const isMounted = useRef(false);
   const {
     Controller,
     reset,
     setData,
-    data,
     control,
     register,
-    post,
-    put,
     watch,
     errors,
     handleSubmit,
@@ -69,9 +67,17 @@ export default function PersonalDetailsForm({
     if (permanentAddressSame) {
       setData("permanent_address", presentAddressSame);
     } else {
-      setData("permanent_address", "");
+      if (isMounted.current) {
+        setData("permanent_address", "");
+      }
     }
-  }, [permanentAddressSame]);
+
+    isMounted.current = true;
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, [permanentAddressSame, presentAddressSame]);
 
   return (
     <>

@@ -14,13 +14,18 @@ import { signal } from "@preact/signals-core";
 import { useSignal } from "@/hook/useSignal";
 import { useRouter } from "next/navigation";
 import { personalDetailsFormData } from "./PersonalDetailsForm";
+import { useEffect, useRef } from "react";
 
 const nomineeFormData = signal(null);
 
 export default function NomineeInfo({ formData, setTotalData, totalData }) {
   const preservedDate = useSignal(nomineeFormData);
+  const isMounted = useRef(false);
   const {
+    watch,
+    setData,
     control,
+    getValues,
     reset,
     register,
     post,
@@ -79,6 +84,25 @@ export default function NomineeInfo({ formData, setTotalData, totalData }) {
       router.push("/dps");
     }
   }
+
+  const permanentAddressSame = watch("permanent_address_same");
+  const presentAddressSame = watch("present_address");
+
+  useEffect(() => {
+    if (permanentAddressSame) {
+      setData("permanent_address", presentAddressSame);
+    } else {
+      if (isMounted.current) {
+        setData("permanent_address", "");
+      }
+    }
+
+    isMounted.current = true;
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, [permanentAddressSame, presentAddressSame]);
 
   return (
     <>
@@ -140,16 +164,19 @@ export default function NomineeInfo({ formData, setTotalData, totalData }) {
               register={register}
             />
           </div>
-          <div className="col-span-9">
-            <TextAreaSet
-              fieldName={"permanent_address"}
-              errors={errors}
-              register={register}
-            />
-          </div>
           <div className="col-span-12">
-            <CheckBox label="Same as Present Address" />
+            <CheckBox {...register("permanent_address_same")} label="Same as Present Address" />
           </div>
+          {permanentAddressSame ? null : (
+            <div className="col-span-9">
+              <TextAreaSet
+                fieldName={"permanent_address"}
+                errors={errors}
+                register={register}
+              />
+            </div>
+          )}
+
           <div className="col-span-4">
             <Label>Upload a Photo of the Applicant</Label>
             <FileUpload {...register("photo")} />
@@ -160,7 +187,11 @@ export default function NomineeInfo({ formData, setTotalData, totalData }) {
           <Button
             variant="stroke"
             type="button"
-            onClick={() => (currentStep.value = 1)}
+            onClick={() => {
+              const data = getValues();
+              nomineeFormData.value = data;
+              currentStep.value = 1;
+            }}
           >
             Back
           </Button>

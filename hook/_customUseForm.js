@@ -16,6 +16,7 @@ export default function useForm(defaultValues = {}) {
     watch,
     trigger,
     control,
+    getValues,
     formState: { errors, isSubmitting },
   } = useHookForm({ defaultValues });
 
@@ -105,6 +106,7 @@ export default function useForm(defaultValues = {}) {
   return {
     useFieldArray,
     Controller,
+    getValues,
     control,
     data,
     setData: setFormData,
