@@ -1,8 +1,8 @@
 import { Roboto } from "next/font/google";
 
 import StoreProvider from "@/src/store/Provider";
-import {NextIntlClientProvider} from 'next-intl';
-import {getLocale, getMessages} from 'next-intl/server';
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import { AuthProvider } from "@/components/AuthProvider";
 
 import "./globals.css";
@@ -10,10 +10,10 @@ import { ToastContainer } from "react-toastify";
 import NextTopLoader from "nextjs-toploader";
 
 const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "My App",
@@ -44,9 +44,9 @@ export default async function RootLayout({ children }) {
                 showSpinner={false}
               />
               <ToastContainer style={{ marginTop: "100px" }} autoClose={3000} />
+              {children}
             </NextIntlClientProvider>
           </StoreProvider>
-          {children}
         </AuthProvider>
       </body>
     </html>

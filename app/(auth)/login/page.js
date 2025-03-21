@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import AuthLayout from "../partial/AuthLayout";
 import AuthCard from "../partial/AuthCard";
 import Label from "@/components/form/Label";
@@ -8,7 +8,6 @@ import Link from "next/link";
 import PasswordField from "@/components/form/PasswordField";
 import TextField from "@/components/form/TextField";
 import ErrorMsg from "@/components/ErrorMsg";
-import { signIn } from "next-auth/react";
 import {
   combineRules,
   emailRule,
@@ -16,47 +15,24 @@ import {
   requiredRule,
 } from "@/utilities/validationUtils";
 import useForm from "@/hook/_customUseForm";
-import { useRouter } from "nextjs-toploader/app";
 import { useSearchParams } from "next/navigation";
+import useAuthFunc from "@/hook/auth";
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const [isLoading, setIsLoading] = useState(false);
-  const [backendError, setError] = useState("");
+  // const { login, error: loginError } = useAuthFunc();
   const { errors, register, handleSubmit } = useForm({
     email: "",
     password: "",
   });
-
-  const router = useRouter();
-
   const submitForm = async (data) => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        ...data,
-      });
-
-      if (result?.error) {
-        setError(result.error);
-        setIsLoading(false);
-        return;
-      }
-
-      router.push(callbackUrl);
-    } catch (error) {
-      setError("An unexpected error occurred. Please try again.");
-      setIsLoading(false);
-    }
+    // await login(data, callbackUrl);
   };
 
   return (
     <form
-      // onSubmit={handleSubmit(submitForm)}
+      onSubmit={handleSubmit(submitForm)}
       className="space-y-4 2xl:space-y-6"
     >
       <div>
