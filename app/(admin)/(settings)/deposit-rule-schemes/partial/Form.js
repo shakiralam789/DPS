@@ -8,6 +8,7 @@ import TextField from "@/components/form/TextField";
 import useForm from "@/hook/_customUseForm";
 import React, { use, useEffect } from "react";
 import TrashIcon from "@/components/icons/TrashIcon";
+import { Controller } from "react-hook-form";
 
 const options = [
   { label: "DS", value: "ds" },
@@ -18,8 +19,6 @@ const options = [
 
 export default function Form({ userData = null }) {
   const {
-    data,
-    Controller,
     control,
     post,
     register,

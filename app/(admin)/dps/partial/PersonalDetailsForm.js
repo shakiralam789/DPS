@@ -6,12 +6,13 @@ import FileUpload from "@/components/form/FileUpload";
 import Label from "@/components/form/Label";
 import TextArea from "@/components/form/TextArea";
 import TextField from "@/components/form/TextField";
-import useForm from "@/hook/_customUseForm";
 import { currentStep } from "./DepositStep";
 import { FileUploadSet } from "@/components/form/FieldSet";
 import { signal } from "@preact/signals-core";
 import { useSignal } from "@/hook/useSignal";
 import { useEffect, useRef } from "react";
+import useForm from "@/hook/_customUseForm";
+import { Controller } from "react-hook-form";
 
 const options = [
   { label: "DS", value: "ds" },
@@ -30,7 +31,6 @@ export default function PersonalDetailsForm({
   const aliveData = useSignal(personalDetailsFormData);
   const isMounted = useRef(false);
   const {
-    Controller,
     reset,
     setData,
     control,
